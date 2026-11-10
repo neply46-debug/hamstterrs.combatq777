@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Hamsters Combat</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    user-select: none;
+  }
+  h1 {
+    color: #6b3e26;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 0 #fff;
+    font-size: 2.2em;
+  }
+  .score {
+    font-size: 1.3em;
+    color: #6b3e26;
+    margin-bottom: 30px;
+    background: #fff8;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-weight: bold;
+  }
+  .hamsters {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 900px;
+  }
+  .hamster-card {
+    background: #fff;
+    border-radius: 25px;
+    padding: 25px 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    text-align: center;
+    transition: transform 0.1s;
+  }
+  .hamster {
+    font-size: 90px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    display: inline-block;
+    filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+  }
+  .hamster:active { transform: scale(0.85); }
+  .name {
+    font-size: 1.15em;
+    font-weight: bold;
+    color: #6b3e26;
+    margin-top: 10px;
+  }
+  .count {
+    font-size: 1.4em;
+    color: #e67e22;
+    margin-top: 5px;
+    font-weight: bold;
+  }
+  .pop {
+    position: fixed;
+    font-size: 1.5em;
+    color: #e67e22;
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 0.8s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -80px) scale(1.5); }
+  }
+</style>
+</head>
+<body>
+
+<h1>🐹 Hamsters Combat</h1>
+<div class="score">Всего кликов: <span id="total">0</span></div>
+
+<div class="hamsters">
+  <div class="hamster-card">
+    <div class="hamster" id="holvin">🐹</div>
+    <div class="name">Holvin14</div>
+    <div class="count" id="holvin-count">0</div>
+  </div>
+
+  <div class="hamster-card">
+    <div class="hamster" id="neply">🐹</div>
+    <div class="name">Neply46</div>
+    <div class="count" id="neply-count">0</div>
+  </div>
+
+  <div class="hamster-card">
+    <div class="hamster" id="tartoya">🐹</div>
+    <div class="name">Tartoya</div>
+    <div class="count" id="tartoya-count">0</div>
+  </div>
+
+  <div class="hamster-card">
+    <div class="hamster" id="misha">🐹</div>
+    <div class="name">Misha_Simunin</div>
+    <div class="count" id="misha-count">0</div>
+  </div>
+</div>
+
+<script>
+  // Счётчики по каждому хомяку
+  const counts = {
+    holvin:  0,
+    neply:   0,
+    tartoya: 0,
+    misha:   0,
+  };
+
+  // Соответствие id элемента -> ключ счётчика
+  const hamsters = [
+    { id: 'holvin',  key: 'holvin'  },
+    { id: 'neply',   key: 'neply'   },
+    { id: 'tartoya', key: 'tartoya' },
+    { id: 'misha',   key: 'misha'   },
+  ];
+
+  function total() {
+    return Object.values(counts).reduce((a, b) => a + b, 0);
+  }
+
+  function renderTotal() {
+    document.getElementById('total').textContent = total();
+  }
+
+  function spawnPop(event) {
+    const pop = document.createElement('div');
+    pop.className = 'pop';
+    pop.textContent = '+1';
+    pop.style.left = event.clientX + 'px';
+    pop.style.top  = event.clientY + 'px';
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 800);
+  }
+
+  function setupHamster(id, key) {
+    const el = document.getElementById(id);
+    el.addEventListener('click', (e) => {
+      counts[key]++;
+      document.getElementById(key + '-count').textContent = counts[key];
+      renderTotal();
+      spawnPop(e);
+    });
+  }
+
+  hamsters.forEach(h => setupHamster(h.id, h.key));
+  renderTotal();
+</script>
+
+</body>
+</html>
